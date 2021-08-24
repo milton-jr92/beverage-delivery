@@ -1,0 +1,23 @@
+{
+  "name": "beverage-delivery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/milton-jr92/beverage-delivery.git"
+  },
+  "author": "Milton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/milton-jr92/beverage-delivery/issues"
+  },
+  "homepage": "https://github.com/milton-jr92/beverage-delivery#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.12"
+  }
+}
