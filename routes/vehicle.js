@@ -1,10 +1,23 @@
-const express = require('express');
-const routes = express.Router();
+// let neDb = require('nedb');
+// let db = new neDb({
+//     filename: 'vehicles.db',
+//     autoload: true
+// });
 
-routes.get('/v1/vehicle', (req, res) => {
-    res.statusCode = 200;
-    res.setHeader ('Content-Type', 'text/html');
-    res.end('<h1>Vehicle</h1>');
-});
+module.exports = (app) => {
+    let route = app.route('/v1/vehicle');
 
-module.exports = routes;
+    route.post((req, res) => {
+        app.control.vehiclesDb.insert(req.body, res);       
+
+        // res.status(200).json(vehicle);
+        // db.insert(req.body, (err, vehicle) => {
+        //     if (err) {
+        //         app.utils.error.send(err, req, res);
+        //     }
+        //     else {
+        //         res.status(200).json(vehicle);
+        //     }
+        // });        
+    });     
+}

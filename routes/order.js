@@ -1,10 +1,15 @@
-const express = require('express');
-const routes = express.Router();
+module.exports = (app) => {
+    let route = app.route('/v1/order');
 
-routes.get('/v1/order', (req, res) => {
-    res.statusCode = 200;
-    res.setHeader ('Content-Type', 'text/html');
-    res.end('<h1>Order</h1>');
-});
-
-module.exports = routes;
+    route.post((req, res) => {
+        app.control.ordersDb.insert(req.body, res); 
+        // db.insert(req.body, (err, order) => {
+        //     if (err) {
+        //         app.utils.error.send(err, req, res);
+        //     }
+        //     else {
+        //         res.status(200).json(order);
+        //     }
+        // });        
+    });     
+}
