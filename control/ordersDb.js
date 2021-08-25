@@ -14,5 +14,26 @@ module.exports = {
                 res.status(200).json(order);
             }
         }); 
-    }    
+    }, 
+    
+    find: () => {
+        return new Promise(function (resolve, reject) {
+            db.find({}).sort({quantity: 1}).exec((err, order) => { // 1: asc; -1: desc
+                if (err) {
+                    reject(app.utils.error.send(err, req));
+                    // app.utils.error.send(err, req);
+                }
+                else {
+                    resolve(order);
+                    // return vehicle;
+    
+                    // res.statusCode = 200;
+                    // res.setHeader('Content-Type', 'application/json');
+                    // res.json({
+                    //     vehicle
+                    // });
+                }
+            });
+        });        
+    }
 } 

@@ -10,10 +10,9 @@ app.use(bodyParser.json());
 consign()
     .include('routes')
     .include('control')
-    .include('utils')
-    .include('pers')
+    .include('utils')    
     .into(app);
 
-app.listen(8000, '127.0.0.1', () => {
+app.listen(9000, '127.0.0.1', () => {
     console.log('Server is running');
 });
