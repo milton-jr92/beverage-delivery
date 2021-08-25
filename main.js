@@ -7,8 +7,13 @@ let app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-consign().include('routes').include('control').into(app);
+consign()
+    .include('routes')
+    .include('control')
+    .include('utils')
+    .include('pers')
+    .into(app);
 
-app.listen(9000, '127.0.0.1', () => {
+app.listen(8000, '127.0.0.1', () => {
     console.log('Server is running');
 });
