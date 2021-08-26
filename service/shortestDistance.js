@@ -11,7 +11,7 @@ const shortestDistanceNode = (distances, visited) => {
 	return shortest;
 };
 
-const findShortestPath = (graph, startNode, endNode) => {
+const shortestDistance = (graph, startNode, endNode) => {
 	// establish object for recording distances from the start node
 	let distances = {};
 	distances[endNode] = "Infinity";
@@ -69,12 +69,12 @@ const findShortestPath = (graph, startNode, endNode) => {
 	shortestPath.reverse();
 
 	// return the shortest path from start node to end node & its distance
-	let results = {
-		distance: distances[endNode],
-		path: shortestPath,
-	};
+	// let results = {
+	// 	distance: distances[endNode],
+	// 	path: shortestPath,
+	// };
 
-	return results;
+	return distances[endNode];
 };
 
-module.exports = findShortestPath;
+module.exports = shortestDistance;
