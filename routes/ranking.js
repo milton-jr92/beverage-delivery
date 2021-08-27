@@ -6,39 +6,74 @@ const score = require('../service/score');
 
 module.exports = (app) => {
     let route = app.route('/v1/order/1/vehicle/ranking');
+    let routeId = app.route('/v1/order/:id/vehicle/ranking');
 
     route.get(async (req, res) => {        
         //get orders & vehicles
         let arrOrders = await app.control.ordersDb.find();
         let arrVehicles = await app.control.vehiclesDb.find();
-        let arrRanking = {
-            'ranking': []
-        };
+        let vehicles = {};
 
-        //Each vehicle will receive an score for each store.
-        //This score is based on the deliver capacity and the current location of the vehicle.
-        for (var vehicle in arrVehicles) {
-            for (var store in arrOrders) {
-                console.log(`from ${arrVehicles[vehicle]['location']} to ${arrOrders[store]['location']}`);
-                let shortestPath = arrVehicles[vehicle]['location'] !== arrOrders[store]['location'] ? findShortestPath(graph, arrVehicles[vehicle]['location'], arrOrders[store]['location']) : 0;
-                console.log(`distance ${shortestPath}`);
+        //Each vehicle will receive an score for each store.        
+        for (var store in arrOrders) {
+            vehicles[arrOrders[store]['store']] = [];
+
+            for (var vehicle in arrVehicles) {                 
+                let shortestPath = arrVehicles[vehicle]['location'] !== arrOrders[store]['location'] ? findShortestPath(graph, arrVehicles[vehicle]['location'], arrOrders[store]['location']) : 0;                
 
                 let this_cargoCapacity = cargoCapacity[arrVehicles[vehicle]['type']];
                 let distance = distanceTable(shortestPath);
 
-                console.log(`cargo ${this_cargoCapacity}`);
-                console.log(`D ${distance}`);
-
-                arrRanking['ranking'].push({
+                //This score is based on the deliver capacity and the current location of the vehicle.
+                vehicles[arrOrders[store]['store']].push({
+                    "id_vehicle": arrVehicles[vehicle]['_id'],
+                    "model": arrVehicles[vehicle]['model'],
+                    "location": arrVehicles[vehicle]['location'],
+                    "capacity": this_cargoCapacity,
                     'score': score(arrOrders[store]['quantity'], this_cargoCapacity, distance)
                 });
             }
-        }
+            
+            vehicles[arrOrders[store]['store']].sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
+        }        
         
         res.statusCode = 200;
-        // res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Type', 'application/json');
         res.json({
-            arrRanking
+            vehicles
         });      
+    });
+
+    routeId.get(async (req, res) => {
+        let order = await app.control.ordersDb.findId(req.params.id);
+        let arrVehicles = await app.control.vehiclesDb.find();
+        let vehicles = {};
+
+        //Each vehicle will receive an score for each store.                
+        vehicles[order['store']] = [];
+
+        for (var vehicle in arrVehicles) {             
+            let shortestPath = arrVehicles[vehicle]['location'] !== order['location'] ? findShortestPath(graph, arrVehicles[vehicle]['location'], order['location']) : 0;
+            
+            let this_cargoCapacity = cargoCapacity[arrVehicles[vehicle]['type']];
+            let distance = distanceTable(shortestPath);
+            
+            //This score is based on the deliver capacity and the current location of the vehicle.
+            vehicles[order['store']].push({
+                "id_vehicle": arrVehicles[vehicle]['_id'],
+                "model": arrVehicles[vehicle]['model'],
+                "location": arrVehicles[vehicle]['location'],
+                "capacity": this_cargoCapacity,
+                'score': score(order['quantity'], this_cargoCapacity, distance)
+            });
+        }
+        
+        vehicles[order['store']].sort((a, b) => parseFloat(b.score) - parseFloat(a.score));                
+        
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json({
+            vehicles
+        });
     });
 }

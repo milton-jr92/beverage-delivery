@@ -20,7 +20,7 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             db.find({}).sort({quantity: 1}).exec((err, order) => { // 1: asc; -1: desc
                 if (err) {
-                    reject(app.utils.error.send(err, req));
+                    reject(err);
                     // app.utils.error.send(err, req);
                 }
                 else {
@@ -35,5 +35,19 @@ module.exports = {
                 }
             });
         });        
+    },
+
+    findId: (orderId) => {
+        return new Promise(function (resolve, reject) {
+            db.findOne({_id: orderId}).exec((err, order) => {  // req.params.parametroDaRota 'name', 'email' etc.
+                if (err) {
+                    reject(err);
+                    // app.utils.error.send(err, req, res);
+                }
+                else {
+                    resolve(order);                    
+                }
+            });
+        });
     }
 } 
