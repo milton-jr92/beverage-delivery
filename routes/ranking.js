@@ -52,26 +52,28 @@ module.exports = (app) => {
         let arrVehicles = await app.control.vehiclesDb.find();
         let vehicles = {};
 
-        //Each vehicle will receive an score for each store.                
-        vehicles[order['store']] = [];
+        if (order != '' && order != null) {
+            //Each vehicle will receive an score for each store.                
+            vehicles[order['store']] = [];
 
-        for (var vehicle in arrVehicles) {
-            let shortestPath = arrVehicles[vehicle]['location'] !== order['location'] ? findShortestPath(graph, arrVehicles[vehicle]['location'], order['location']) : 0;
+            for (var vehicle in arrVehicles) {
+                let shortestPath = arrVehicles[vehicle]['location'] !== order['location'] ? findShortestPath(graph, arrVehicles[vehicle]['location'], order['location']) : 0;
 
-            let this_cargoCapacity = cargoCapacity[arrVehicles[vehicle]['type']];
-            let distance = distanceTable(shortestPath);
+                let this_cargoCapacity = cargoCapacity[arrVehicles[vehicle]['type']];
+                let distance = distanceTable(shortestPath);
 
-            //This score is based on the deliver capacity and the current location of the vehicle.
-            vehicles[order['store']].push({
-                "id_vehicle": arrVehicles[vehicle]['_id'],
-                "model": arrVehicles[vehicle]['model'],
-                "location": arrVehicles[vehicle]['location'],
-                "capacity": this_cargoCapacity,
-                'score': score(order['quantity'], this_cargoCapacity, distance)
-            });
-        }
+                //This score is based on the deliver capacity and the current location of the vehicle.
+                vehicles[order['store']].push({
+                    "id_vehicle": arrVehicles[vehicle]['_id'],
+                    "model": arrVehicles[vehicle]['model'],
+                    "location": arrVehicles[vehicle]['location'],
+                    "capacity": this_cargoCapacity,
+                    'score': score(order['quantity'], this_cargoCapacity, distance)
+                });
+            }
 
-        vehicles[order['store']].sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
+            vehicles[order['store']].sort((a, b) => parseFloat(b.score) - parseFloat(a.score));
+        }        
 
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
