@@ -20,18 +20,10 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             db.find({}).sort({location: 1}).exec((err, vehicle) => { // 1: asc; -1: desc
                 if (err) {
-                    reject(app.utils.error.send(err, req));
-                    // app.utils.error.send(err, req);
+                    reject(app.utils.error.send(err, req));                    
                 }
                 else {
-                    resolve(vehicle);
-                    // return vehicle;
-    
-                    // res.statusCode = 200;
-                    // res.setHeader('Content-Type', 'application/json');
-                    // res.json({
-                    //     vehicle
-                    // });
+                    resolve(vehicle);                    
                 }
             });
         });        

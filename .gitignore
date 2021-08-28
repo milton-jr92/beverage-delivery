@@ -1,6 +1,9 @@
 # compiled output
 /node_modules
 
+# BD
+orders.db
+vehicles.db 
 # Logs
 logs
 *.log
