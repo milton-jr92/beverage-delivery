@@ -39,8 +39,7 @@ I created two collections: orders.db and vehicles.db, that will be automatically
 
 * Step 1 - cloning the repo https://github.com/milton-jr92/beverage-delivery.git;
 * Step 2 - inside the folder /beverage-delivery, execute the command "npm install";
-* Step 3 - once the installed is concluded with success and no errors (some warning may appear depending of the arch where is being executed), we can start run the API with the command "node main".
-** "Server is running on port 9000" should appear.
+* Step 3 - once the installed is concluded with success and no errors (some warning may appear depending of the arch where is being executed), we can start run the API with the command "node main" ("Server is running on port 9000" should appear).
 
 Another option is generating an image and executing as a container with docker after cloning the repo, check the Dockerfile to see the config.
 
