@@ -18,7 +18,9 @@ const shortestDistance = (graph, startNode, endNode) => {
 	distances = Object.assign(distances, graph[startNode]);
 
 	// track paths
-	let parents = { endNode: null };
+	let parents = {
+		endNode: null
+	};
 	for (let child in graph[startNode]) {
 		parents[child] = startNode;
 	}
@@ -62,17 +64,13 @@ const shortestDistance = (graph, startNode, endNode) => {
 	// record the shortest path
 	let shortestPath = [endNode];
 	let parent = parents[endNode];
+
 	while (parent) {
 		shortestPath.push(parent);
 		parent = parents[parent];
 	}
-	shortestPath.reverse();
 
-	// return the shortest path from start node to end node & its distance
-	// let results = {
-	// 	distance: distances[endNode],
-	// 	path: shortestPath,
-	// };
+	shortestPath.reverse();
 
 	return distances[endNode];
 };
